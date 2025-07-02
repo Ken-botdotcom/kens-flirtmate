@@ -9,28 +9,33 @@ def home():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    message = request.json.get("message", "").lower()
+        message = request.json.get("message", "").lower()
 
-    if "tip" in message:
+    if "tip" in message or "advice" in message:
         return jsonify({"response": get_random_tip()})
+    elif "bold" in message or "naughty" in message or "wild" in message:
+        return jsonify({"response": get_idea_by_category("bold")})
+    elif "classic" in message or "sweet" in message:
+        return jsonify({"response": get_idea_by_category("classic")})
+    elif "emoji" in message:
+        return jsonify({"response": get_idea_by_category("emoji")})
+    elif "role" in message or "roleplay" in message or "fantasy" in message:
+        return jsonify({"response": get_idea_by_category("roleplay")})
+    elif "quickie" in message or "quick" in message:
+        return jsonify({"response": get_idea_by_category("quickies")})
+    elif "ldr" in message or "distance" in message or "long" in message:
+        return jsonify({"response": get_idea_by_category("ldr")})
+    elif "public" in message or "tease" in message:
+        return jsonify({"response": get_idea_by_category("public")})
+    elif "toy" in message or "remote" in message or "tech" in message:
+        return jsonify({"response": get_idea_by_category("toys")})
+    elif "affirm" in message or "compliment" in message or "nice" in message:
+        return jsonify({"response": get_idea_by_category("affirmations")})
+    elif "consent" in message or "permission" in message:
+        return jsonify({"response": "Consent is key! Always ask if your partner is okay receiving steamy messages. Ex: 'Wanna play a little dirty tonight?' 😉"})
+    else:
+        return jsonify({"response": get_random_tip()})  # Fallback now gives a tip, not a menu
 
-    elif "idea" in message:
-        if "role" in message:
-            category = "roleplay"
-        elif "emoji" in message:
-            category = "emoji"
-        elif "ldr" in message:
-            category = "ldr"
-        elif "bold" in message:
-            category = "bold"
-        else:
-            category = "classic"
-        return jsonify({"response": get_idea_by_category(category)})
-
-    elif "consent" in message:
-        return jsonify({"response": "Consent is key! Ask if they’re okay with receiving steamy messages. You can say: 'Hey, are you cool if I send something flirty?'"})
-
-    return jsonify({"response": "Want a sexting tip, a category idea (classic, bold, emoji, roleplay), or advice on consent?"})
 
 if __name__ == "__main__":
     import os
