@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ken's FlirtMate 💬</title>
+    <style>
+        body { font-family: Arial; background: #111; color: #eee; text-align: center; padding: 30px; }
+        h1 { color: #ff69b4; }
+        input, select, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+        }
+        #response-box {
+            margin-top: 20px;
+            padding: 10px;
+            background: #222;
+            border-radius: 8px;
+            min-height: 60px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>💬 Ken's FlirtMate</h1>
+    <p>Pick a vibe or type a message below:</p>
+    <select id="category">
+        <option value="">-- Select Category --</option>
+        <option value="classic">Classic</option>
+        <option value="bold">Bold</option>
+        <option value="emoji">Emoji Flirt</option>
+        <option value="roleplay">Roleplay</option>
+        <option value="quickies">Quickies</option>
+        <option value="ldr">Long Distance</option>
+        <option value="toys">Tech & Toys</option>
+        <option value="public">Public Tease</option>
+        <option value="affirmations">Affirmations</option>
+        <option value="tip">Sexting Tip</option>
+        <option value="consent">Consent Advice</option>
+    </select><br>
+
+    <input type="text" id="message" placeholder="Or type your own message..." />
+    <button onclick="sendMessage()">Send</button>
+
+    <div id="response-box"></div>
+
+    <script>
+        async function sendMessage() {
+            let category = document.getElementById("category").value;
+            let input = document.getElementById("message").value.trim();
+            let msg = input || category || "tip";
+
+            const res = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: msg })
+            });
+            const data = await res.json();
+            document.getElementById("response-box").innerText = "Bot: " + data.response;
+        }
+    </script>
+</body>
+</html>
