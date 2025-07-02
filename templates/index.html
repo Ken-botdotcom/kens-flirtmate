@@ -1,0 +1,26 @@
+templates/index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ken's FlirtMate</title>
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("message").value;
+            const res = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            });
+            const data = await res.json();
+            document.getElementById("response").innerText = "Bot: " + data.response;
+        }
+    </script>
+</head>
+<body>
+    <h1>💬 Ken's FlirtMate</h1>
+    <input type="text" id="message" placeholder="Type something spicy..." />
+    <button onclick="sendMessage()">Send</button>
+    <p id="response"></p>
+</body>
+</html>
+Add index.html to templates folder
