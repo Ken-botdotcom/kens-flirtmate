@@ -33,4 +33,7 @@ def chat():
     return jsonify({"response": "Want a sexting tip, a category idea (classic, bold, emoji, roleplay), or advice on consent?"})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    import os
+port = int(os.environ.get("PORT", 5000))
+app.run(host='0.0.0.0', port=port)
+
