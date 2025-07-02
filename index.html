@@ -4,15 +4,12 @@
   <meta charset="UTF-8" />
   <title>Ken's FlirtMate 💬</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      width: 100%;
       font-family: 'Segoe UI', sans-serif;
     }
 
@@ -56,11 +53,9 @@
 
     #chat-container {
       flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
       overflow-y: auto;
       padding: 20px;
+      margin-bottom: 100px; /* Ensures bot replies aren't hidden */
     }
 
     .chat-bubble {
@@ -90,6 +85,13 @@
       align-self: flex-start;
       border-bottom-left-radius: 4px;
       float: left;
+    }
+
+    #typing {
+      font-style: italic;
+      font-size: 1em;
+      color: #888;
+      margin: 0 16px;
     }
 
     #input-area {
@@ -148,6 +150,7 @@
   <h1>💬 Ken's FlirtMate</h1>
 
   <div id="chat-container"></div>
+  <div id="typing"></div>
 
   <div id="input-area">
     <input type="text" id="message" placeholder="Type your message..." onkeydown="handleKey(event)" />
@@ -164,9 +167,11 @@
     async function sendMessage() {
       const input = document.getElementById("message");
       const container = document.getElementById("chat-container");
+      const typing = document.getElementById("typing");
       const text = input.value.trim();
       if (!text) return;
 
+      // User bubble
       const userBubble = document.createElement("div");
       userBubble.classList.add("chat-bubble", "user");
       userBubble.textContent = text;
@@ -175,6 +180,11 @@
 
       input.value = "";
 
+      // Typing animation
+      typing.textContent = "FlirtMate is typing...";
+      container.scrollTop = container.scrollHeight;
+
+      // Fetch bot reply
       const res = await fetch("/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -182,6 +192,8 @@
       });
 
       const data = await res.json();
+      typing.textContent = "";
+
       const botBubble = document.createElement("div");
       botBubble.classList.add("chat-bubble", "bot");
       botBubble.textContent = data.response;
